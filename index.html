@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Kiwi Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        img {
+            position: absolute;
+            cursor: pointer;
+        }
+
+        #score {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            font-size: 3vw;
+            color: #333;
+        }
+
+        #time {
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            font-size: 3vw;
+            color: #333;
+        }
+
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+            display: none;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #game-over h2 {
+            font-size: 4vw;
+            margin-bottom: 20px;
+        }
+
+        #restart-btn {
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            padding: 2vw 4vw;
+            font-size: 3vw;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">Score: 0</div>
+    <div id="time">Time: 30s</div>
+
+    <div id="game-over">
+        <h2>Game Over!</h2>
+        <p>Your score is: <span id="final-score">0</span></p>
+        <button id="restart-btn">Play Again</button>
+    </div>
+
+    <script>
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const gameOverDisplay = document.getElementById('game-over');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const restartButton = document.getElementById('restart-btn');
+
+        let score = 0;
+        let timeLimit = 30;
+        let timer;
+        
+        function generateKiwi() {
+            const kiwiImage = document.createElement('img');
+            kiwiImage.src = 'kiwi.png';
+            kiwiImage.style.width = '100px';
+            kiwiImage.style.height = 'auto';
+
+            const kiwiWidth = kiwiImage.width;
+            const kiwiHeight = kiwiImage.height;
+
+            const randomLeft = Math.random() * (window.innerWidth - kiwiWidth);
+            const randomTop = Math.random() * (window.innerHeight - kiwiHeight);
+
+            const left = Math.max(0, randomLeft);
+            const top = Math.max(0, randomTop);
+
+            kiwiImage.style.left = `${left}px`;
+            kiwiImage.style.top = `${top}px`;
+
+            kiwiImage.addEventListener('click', function () {
+                score++;
+                updateScore();
+                animateKiwi(kiwiImage);
+            });
+
+            document.body.appendChild(kiwiImage);
+        }
+
+        function updateScore() {
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
+
+        function updateTimer() {
+            timeDisplay.textContent = `Time: ${timeLimit}s`;
+        }
+
+        function startTimer() {
+            timer = setInterval(function () {
+                timeLimit--;
+                updateTimer();
+
+                if (timeLimit <= 0) {
+                    clearInterval(timer);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function startGame() {
+            score = 0;
+            timeLimit = 30;
+            updateScore();
+            updateTimer();
+            gameOverDisplay.style.display = 'none';
+            document.querySelectorAll('img').forEach(img => img.remove());
+            startTimer();
+            generateKiwi();
+        }
+
+        function endGame() {
+            clearInterval(timer);
+            gameOverDisplay.style.display = 'block';
+            finalScoreDisplay.textContent = score;
+        }
+
+        function animateKiwi(kiwiImage) {
+            kiwiImage.style.transform = 'scale(1.5)';
+            setTimeout(function () {
+                kiwiImage.style.transform = 'scale(1)';
+                kiwiImage.remove();
+                generateKiwi();
+            }, 300);
+        }
+
+        restartButton.addEventListener('click', function () {
+            startGame();
+        });
+
+        startGame();
+    </script>
+</body>
+</html>

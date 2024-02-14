@@ -96,8 +96,16 @@
             kiwiImage.style.width = '100px';
             kiwiImage.style.height = 'auto';
 
-            const kiwiWidth = kiwiImage.width;
-            const kiwiHeight = kiwiImage.height;
+            kiwiImage.addEventListener('click', function () {
+                score++;
+                updateScore();
+                animateKiwi(kiwiImage);
+            });
+
+            document.body.appendChild(kiwiImage);
+
+            const kiwiWidth = kiwiImage.clientWidth; // Lấy kích thước thực của kiwi
+            const kiwiHeight = kiwiImage.clientHeight;
 
             const randomLeft = Math.random() * (window.innerWidth - kiwiWidth);
             const randomTop = Math.random() * (window.innerHeight - kiwiHeight);
@@ -107,14 +115,6 @@
 
             kiwiImage.style.left = `${left}px`;
             kiwiImage.style.top = `${top}px`;
-
-            kiwiImage.addEventListener('click', function () {
-                score++;
-                updateScore();
-                animateKiwi(kiwiImage);
-            });
-
-            document.body.appendChild(kiwiImage);
         }
 
         function updateScore() {

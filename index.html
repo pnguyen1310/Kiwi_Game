@@ -104,17 +104,15 @@
 
             document.body.appendChild(kiwiImage);
 
-            const kiwiWidth = kiwiImage.clientWidth; // Lấy kích thước thực của kiwi
+            const kiwiWidth = kiwiImage.clientWidth;
             const kiwiHeight = kiwiImage.clientHeight;
 
             const randomLeft = Math.random() * (window.innerWidth - kiwiWidth);
             const randomTop = Math.random() * (window.innerHeight - kiwiHeight);
 
-            const left = Math.max(0, randomLeft);
-            const top = Math.max(0, randomTop);
-
-            kiwiImage.style.left = `${left}px`;
-            kiwiImage.style.top = `${top}px`;
+            kiwiImage.style.position = 'absolute'; // Thiết lập kiwiImage có vị trí tuyệt đối
+            kiwiImage.style.left = `${randomLeft}px`;
+            kiwiImage.style.top = `${randomTop}px`;
         }
 
         function updateScore() {
